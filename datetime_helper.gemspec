@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency 'rspec',       '~> 3'
-  spec.add_runtime_dependency 'activemodel', '~> 5'
+  spec.add_runtime_dependency 'activemodel', '>= 4'
   spec.add_runtime_dependency 'active_model_serializers'
 
   spec.add_development_dependency "bundler", "~> 1.9"
