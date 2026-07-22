@@ -1,0 +1,33 @@
+name: Transitive Dependency Updates
+on:
+  schedule:
+    - cron: '0 6 * * 5'
+      timezone: 'Australia/Sydney'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+      - name: Update dependencies
+        run: pnpm up -r
+      - name: Deduplicate dependencies
+        run: pnpm dedupe
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          commit-message: 'chore(deps): bump transitive dependencies'
+          title: 'chore(deps): bump transitive dependencies'
+          body: 'Automated dependency updates'
+          branch: 'deps/pnpm-up'
+          labels: |
+            dependencies
+            digital-tech
+            javascript
